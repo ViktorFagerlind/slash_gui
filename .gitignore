@@ -1,0 +1,7 @@
+*.npp
+*.pyc
+*.rslt
+*.log
+QtProject/*
+.idea/*
+bin/__pycache__

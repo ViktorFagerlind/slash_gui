@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>863</width>
+    <height>874</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <widget class="QSplitter" name="splitter_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <widget class="QSplitter" name="splitter">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <widget class="QGroupBox" name="groupBoxTests">
+        <property name="baseSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="title">
+         <string>Tests</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QTabWidget" name="tabWidgetTest">
+           <property name="currentIndex">
+            <number>-1</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <property name="sizeConstraint">
+            <enum>QLayout::SetMinimumSize</enum>
+           </property>
+           <item>
+            <widget class="QPushButton" name="startSetButton">
+             <property name="text">
+              <string>Start Test Set</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>icons/PlayMultiple.png</normaloff>icons/PlayMultiple.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="startTestButton">
+             <property name="text">
+              <string>Start Test</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>icons/Play.png</normaloff>icons/Play.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="abortButton">
+             <property name="text">
+              <string>Abort</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>icons/Cancel.png</normaloff>icons/Cancel.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QGroupBox" name="groupBoxResults">
+        <property name="title">
+         <string>Results</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QTreeView" name="TreeViewResults">
+           <property name="iconSize">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <property name="sizeConstraint">
+            <enum>QLayout::SetMinimumSize</enum>
+           </property>
+           <item>
+            <widget class="QPushButton" name="gotoLogButton">
+             <property name="text">
+              <string>Goto Log</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>icons/Script.png</normaloff>icons/Script.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <widget class="QGroupBox" name="groupBoxLog">
+       <property name="title">
+        <string>Logs</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QTabWidget" name="tabWidgetLog">
+          <property name="currentIndex">
+           <number>-1</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <property name="sizeConstraint">
+           <enum>QLayout::SetMinimumSize</enum>
+          </property>
+          <item>
+           <widget class="QPushButton" name="closeLogsButton">
+            <property name="text">
+             <string>Close Logs</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>icons/WideBrush.png</normaloff>icons/WideBrush.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>863</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionQuit"/>
+   </widget>
+   <widget class="QMenu" name="menuTest">
+    <property name="title">
+     <string>Test</string>
+    </property>
+    <addaction name="actionStartSet"/>
+    <addaction name="actionStartTest"/>
+    <addaction name="actionAbort"/>
+   </widget>
+   <widget class="QMenu" name="menuResults">
+    <property name="title">
+     <string>Results</string>
+    </property>
+    <addaction name="actionActionGotoLog"/>
+   </widget>
+   <widget class="QMenu" name="menuLogs">
+    <property name="title">
+     <string>Logs</string>
+    </property>
+    <addaction name="actionActionCloseLogs"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuTest"/>
+   <addaction name="menuResults"/>
+   <addaction name="menuLogs"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextBesideIcon</enum>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionStartSet"/>
+   <addaction name="actionStartTest"/>
+   <addaction name="actionAbort"/>
+   <addaction name="separator"/>
+   <addaction name="actionActionGotoLog"/>
+   <addaction name="separator"/>
+   <addaction name="actionActionCloseLogs"/>
+  </widget>
+  <action name="actionQuit">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/Delete.png</normaloff>icons/Delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>Quit</string>
+   </property>
+  </action>
+  <action name="actionStartTest">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/Play.png</normaloff>icons/Play.png</iconset>
+   </property>
+   <property name="text">
+    <string>Start Test</string>
+   </property>
+   <property name="toolTip">
+    <string>Start Test</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionAbort">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/Cancel.png</normaloff>icons/Cancel.png</iconset>
+   </property>
+   <property name="text">
+    <string>Abort</string>
+   </property>
+  </action>
+  <action name="actionStartSet">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/PlayMultiple.png</normaloff>icons/PlayMultiple.png</iconset>
+   </property>
+   <property name="text">
+    <string>Start Test Set</string>
+   </property>
+   <property name="toolTip">
+    <string>Start Test</string>
+   </property>
+  </action>
+  <action name="actionTestResultsClicked">
+   <property name="text">
+    <string>TestResultsClicked</string>
+   </property>
+  </action>
+  <action name="actionActionCloseLogs">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/WideBrush.png</normaloff>icons/WideBrush.png</iconset>
+   </property>
+   <property name="text">
+    <string>Close Logs</string>
+   </property>
+  </action>
+  <action name="actionActionGotoLog">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/Script.png</normaloff>icons/Script.png</iconset>
+   </property>
+   <property name="text">
+    <string>Goto Log</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>startSetButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionStartSet</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>48</x>
+     <y>557</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>startTestButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionStartTest</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>129</x>
+     <y>576</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>abortButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionAbort</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>210</x>
+     <y>576</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>TreeViewResults</sender>
+   <signal>doubleClicked(QModelIndex)</signal>
+   <receiver>actionTestResultsClicked</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>362</x>
+     <y>525</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>closeLogsButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionActionCloseLogs</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>643</x>
+     <y>821</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>gotoLogButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionActionGotoLog</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>57</x>
+     <y>821</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
