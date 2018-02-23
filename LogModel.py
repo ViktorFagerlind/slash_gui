@@ -55,8 +55,6 @@ class ListViewHandler(logbook.Handler):
 
         if record.level == logbook.DEBUG or record.level == logbook.INFO:
             item.setForeground(QtGui.QColor("black"))
-#        elif record.level == loglevel_SUCCESS:
-#            item.setForeground(QtGui.QColor("green"))
         elif record.level == logbook.WARNING:
             item.setForeground(QtGui.QColor("orange"))
         elif record.level == logbook.ERROR or record.level == logbook.CRITICAL:

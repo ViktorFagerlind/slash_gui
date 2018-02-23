@@ -30,11 +30,11 @@ class ControlMainWindow(QtGui.QMainWindow):
                                        self.ui.actionAbort)
 
         # Init TestResultManager
-        self.resultTreeModel = ResultTreeModel(self.ui.TreeViewResults, self.ui.actionTestResultsClicked)
-        self.ui.TreeViewResults.setModel(self.resultTreeModel)
+        self.result_tree_model = ResultTreeModel(self.ui.TreeViewResults, self.ui.actionTestResultsClicked)
+        self.ui.TreeViewResults.setModel(self.result_tree_model)
         self.ui.TreeViewResults.setAlternatingRowColors(True)
 
-        TestResultManager.setup(self.resultTreeModel)
+        TestResultManager.setup(self.result_tree_model)
 
         self.restoreGuiState()
 

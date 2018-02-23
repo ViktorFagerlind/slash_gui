@@ -1,7 +1,7 @@
-from slash.frontend.slash_run import slash_run
 from slash.loader import Loader
 from slash.utils.suite_files import iter_suite_file_paths
-from PySide import QtGui
+from PySide import QtGui, QtCore
+from enum import IntEnum
 from LogModel import LogModel
 
 import sys
@@ -11,6 +11,7 @@ import logbook
 import re
 import colorama
 import os
+import threading
 
 # ---- TestManager -----------------------------------------------------------------------------------------------------
 
@@ -48,20 +49,34 @@ class TestSuite:
 
         self.refresh_gui()
 
+    @staticmethod
+    def slash_runner_thread(test_files):
+        #slash_run(args)
+        with slash.Session() as session:
+                tests = Loader().get_runnables(test_files)
+                with session.get_started_context():
+                    slash.run_tests(tests)
+
+    @staticmethod
+    def run_slash_in_thread(args):
+        t = threading.Thread(target=TestSuite.slash_runner_thread, args=(args,))
+        t.start()
+        #TestSuite.slash_runner_thread(args)
+
     def start(self):
         slash.logger.info('Start suit: slash run ' + self.cmd)
-        slash_run(self.cmd.split())
+        TestSuite.run_slash_in_thread(self.cmd.split())
 
-    def startTest(self):
+    def start_test(self):
         selected_items = self.list_view.selectedIndexes()
         if (len(selected_items) != 1):
             slash.logger.error("No test selected!")
             return
 
-        cmd = self.tests[selected_items[0].row()].filepath
+        testfile = self.tests[selected_items[0].row()].filepath
 
-        slash.logger.info('Start single test file: slash run ' + cmd)
-        slash_run([cmd])
+        slash.logger.info('Start single test file: slash run ' + testfile)
+        TestSuite.run_slash_in_thread([testfile])
 
 
     def refresh_gui(self):
@@ -70,19 +85,20 @@ class TestSuite:
             item = QtGui.QStandardItem(t.display_name)
             self.model_tests.appendRow(item)
 
-class TestManager:
-    def __init__(self, tabWidget, actionStartSuit, actionStartTest, actionAbort):
 
-        self.tabWidget = tabWidget
+
+class TestManager:
+    def __init__(self, tab_widget, action_start_suit, action_start_test, action_abort):
+        self.tabWidget = tab_widget
 
         colorama.init()
 
         test_dir = 'tests/'
         suit_dir = 'suits/'
 
-        actionStartTest.triggered.connect(self.startTest)
-        actionStartSuit.triggered.connect(self.startSuit)
-        actionAbort.triggered.connect(TestManager.Abort)
+        action_start_test.triggered.connect(self.start_test)
+        action_start_suit.triggered.connect(self.start_suit)
+        action_abort.triggered.connect(TestManager.abort)
 
         suit_filenames = get_filenames_from_dir('*.suit', suit_dir)
 
@@ -96,7 +112,7 @@ class TestManager:
             self.add_test_suite(sfn.split('.')[0], TestManager.get_tests_from_dirs(paths), '-f ' + suit_dir + sfn)
 
     def __del__(self):
-        pass#Log.mainLog.pop_application()
+        pass
 
 
     @staticmethod
@@ -134,48 +150,85 @@ class TestManager:
         self.tabWidget.addTab(list_view, suite_name)
         self.suites.append(test_suite)
 
-    @staticmethod
-    @slash.hooks.session_start.register
-    def session_start_handlder():
-        LogModel.systemHandler.push_application()
-        slash.logger.handlers.insert(0, LogModel.systemHandler)
-        slash.logger.info("Session started: " + str(slash.context.session))
+    def start_test(self):
+        self.suites[self.tabWidget.currentIndex()].start_test()
 
-    @staticmethod
-    @slash.hooks.session_end.register
-    def session_end_handlder():
-        slash.logger.info("Session ended: " + str(slash.context.session))
-        slash.logger.handlers.remove(LogModel.systemHandler)
-        LogModel.systemHandler.pop_application()
-
-    handlers = {}
-
-    @staticmethod
-    @slash.hooks.test_start.register
-    def test_start_handlder():
-        #slash.logger.info("Test started: " + str(slash.context.test_id))
-
-        handler = LogModel.getLogHandler(slash.test.__slash__.function_name + ' #' + str(slash.context.test.__slash__.test_index1),
-                                         logbook.INFO,
-                                         False)
-        slash.logger.handlers.insert(0,handler)
-        TestManager.handlers[slash.context.test_id] = handler
-
-    @staticmethod
-    @slash.hooks.test_end.register
-    def test_end_handlder():
-        handler = TestManager.handlers[slash.context.test_id]
-        slash.logger.handlers.remove(handler)
-        del TestManager.handlers[slash.context.test_id]
-
-        #slash.logger.info("Test ended: " + str(slash.context.test_id))
-
-    def startTest(self):
-        self.suites[self.tabWidget.currentIndex()].startTest()
-
-    def startSuit(self):
+    def start_suit(self):
         self.suites[self.tabWidget.currentIndex()].start()
 
     @staticmethod
-    def Abort():
+    def abort():
         slash.logger.warning("Abort")
+        # TODO not implemented
+
+# Management of slash hooks ----------------------------------------------------------------------------------------
+
+@QtCore.Slot(str)
+def session_start(id):
+    print('session_start ' + id)
+#    LogModel.systemHandler.push_application()
+    slash.logger.handlers.insert(0, LogModel.systemHandler)
+    slash.logger.info("Session started: " + str(slash.context.session))
+
+@QtCore.Slot(str)
+def session_end(id):
+    print('session_stop ' + id)
+    slash.logger.info("Session ended: " + id)
+    slash.logger.handlers.remove(LogModel.systemHandler)
+#    LogModel.systemHandler.pop_application()
+
+@QtCore.Slot(str)
+def test_start(id):
+    print('test_start ' + id)
+    slash.logger.info("Test started: " + id)
+    handler = LogModel.getLogHandler(
+        slash.test.__slash__.function_name + ' #' + str(slash.context.test.__slash__.test_index1),
+        logbook.INFO,
+        False)
+    slash.logger.handlers.insert(0, handler)
+    handlers[id] = handler
+
+@QtCore.Slot(str)
+def test_end(id):
+    print('test_stop ' + id)
+    handler = handlers[id]
+    slash.logger.handlers.remove(handler)
+    del handlers[id]
+    slash.logger.info("Test ended: " + id)
+
+
+class MessageSender(QtCore.QObject):
+    session_start = QtCore.Signal(str)
+    session_end = QtCore.Signal(str)
+    test_start = QtCore.Signal(str)
+    test_end = QtCore.Signal(str)
+
+message_sender = MessageSender()
+message_sender.session_start.connect(session_start)
+message_sender.session_end.connect(session_end)
+message_sender.test_start.connect(test_start)
+message_sender.test_end.connect(test_end)
+
+handlers = {}
+
+@staticmethod
+@slash.hooks.session_start.register
+def session_start_handler():
+    print('session_start_handler')
+    message_sender.session_start.emit(str(slash.context.session_id))
+
+@staticmethod
+@slash.hooks.session_end.register
+def session_end_handler():
+    message_sender.session_end.emit(str(slash.context.session_id))
+
+@staticmethod
+@slash.hooks.test_start.register
+def test_start_handler():
+    message_sender.test_start.emit(str(slash.context.test_id))
+
+@staticmethod
+@slash.hooks.test_end.register
+def test_end_handler():
+    message_sender.test_end.emit(str(slash.context.test_id))
+
