@@ -95,7 +95,7 @@ class TestManager:
 
         colorama.init()
 
-        test_dir = 'tests/'
+        test_dir = 'src/tests/'
         suit_dir = 'suits/'
 
         action_start_test.triggered.connect(self.start_test)
