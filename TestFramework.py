@@ -1,11 +1,13 @@
 import sys
+import importlib.util
 
-from ResultTreeModel import ResultTreeModel
-from TestManager import TestManager
-from Results import TestResultManager
 from PySide import QtGui, QtCore
-from MainWindow import Ui_MainWindow
-from LogModel import LogModel
+
+from .ResultTreeModel import ResultTreeModel
+from .TestManager import TestManager
+from .Results import TestResultManager
+from .MainWindow import Ui_MainWindow
+from .LogModel import LogModel
 
 
 class ControlMainWindow(QtGui.QMainWindow):
@@ -71,9 +73,12 @@ class ControlMainWindow(QtGui.QMainWindow):
 
         qsettings.endGroup()
 
+    @staticmethod
+    def start():
+        app = QtGui.QApplication(sys.argv)
+        mySW = ControlMainWindow()
+        mySW.show()
+        sys.exit(app.exec_())
 
 if __name__ == "__main__":
-    app = QtGui.QApplication(sys.argv)
-    mySW = ControlMainWindow()
-    mySW.show()
-    sys.exit(app.exec_())
+    ControlMainWindow.start()

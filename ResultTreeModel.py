@@ -4,8 +4,8 @@ import sys
 import operator
 
 from PySide import QtCore
-from ResultTreeItems import LogTreeItem, SetTreeItem, TestTreeItem, CriteriaTreeItem, EvaluationTreeItem, RootTreeItem
-from Results import TestResultManager
+from .ResultTreeItems import LogTreeItem, SetTreeItem, TestTreeItem, CriteriaTreeItem, EvaluationTreeItem, RootTreeItem
+from .Results import TestResultManager
 
 
 class ResultTreeModel(QtCore.QAbstractItemModel):

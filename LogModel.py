@@ -1,7 +1,9 @@
+from queue import Queue, Empty
+from PySide import QtGui, QtCore
+
 import logbook
 import slash
 
-from PySide import QtGui
 
 class LogModel:
     tabWidget = None
@@ -48,24 +50,48 @@ class ListViewHandler(logbook.Handler):
 
         self.font = QtGui.QFont("Courier New", 9, QtGui.QFont.Light)
 
+        self.timer = QtCore.QTimer(listView)
+        self.message_queue = Queue()
+
     def emit(self, record):
-        line = self.format(record)
+        self.message_queue.put({'line': str(self.format(record)), 'level': record.level})
 
-        item = QtGui.QStandardItem(line)
+    def startAutomaticUpdates(self):
+        #print('startAutomaticUpdates')
+        self.timer.timeout.connect(self._updateLogWindow)
+        self.timer.start(10)
 
-        if record.level == logbook.DEBUG or record.level == logbook.INFO:
-            item.setForeground(QtGui.QColor("black"))
-        elif record.level == logbook.WARNING:
-            item.setForeground(QtGui.QColor("orange"))
-        elif record.level == logbook.ERROR or record.level == logbook.CRITICAL:
-            item.setForeground(QtGui.QColor("red"))
+    def stopAutomaticUpdates(self):
+        #print('stopAutomaticUpdates')
+        self.timer.timeout.disconnect(self._updateLogWindow)
+        self.timer.stop()
+        self._updateLogWindow()
 
-        self.font.setBold(record.level == logbook.CRITICAL)
+    def _updateLogWindow(self):
+        try:
+            while True:
+                message = self.message_queue.get(False)
+                line = message['line']
+                level = message['level']
+                item = QtGui.QStandardItem(line)
+                #print('line: ' + line)
 
-        item.setFont(self.font)
-        self.modelLog.appendRow(item)
+                if level == logbook.DEBUG or level == logbook.INFO:
+                    item.setForeground(QtGui.QColor("black"))
+                elif level == logbook.WARNING:
+                    item.setForeground(QtGui.QColor("orange"))
+                elif level == logbook.ERROR or level == logbook.CRITICAL:
+                    item.setForeground(QtGui.QColor("red"))
+
+                self.font.setBold(level == logbook.CRITICAL)
+
+                item.setFont(self.font)
+                self.modelLog.appendRow(item)
+
+        except Empty:
+            pass
+
         self.listView.scrollToBottom()
-
 
     def write(self, m):
         pass
