@@ -64,6 +64,8 @@ class ListViewHandler(logbook.Handler):
 
         item.setFont(self.font)
         self.modelLog.appendRow(item)
+        self.listView.scrollToBottom()
+
 
     def write(self, m):
         pass

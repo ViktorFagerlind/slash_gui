@@ -3,6 +3,7 @@ from slash.utils.suite_files import iter_suite_file_paths
 from PySide import QtGui, QtCore
 from enum import IntEnum
 from LogModel import LogModel
+from threading import Event
 
 import sys
 import slash
@@ -12,6 +13,7 @@ import re
 import colorama
 import os
 import threading
+import time
 
 # ---- TestManager -----------------------------------------------------------------------------------------------------
 
@@ -161,25 +163,33 @@ class TestManager:
         slash.logger.warning("Abort")
         # TODO not implemented
 
-# Management of slash hooks ----------------------------------------------------------------------------------------
+# -- These handlers are invoked by the slash hooks but run in the GUI thread -------------------------------------------
+
+session_event = Event()
+test_event = Event()
+handlers = {}
 
 @QtCore.Slot(str)
 def session_start(id):
-    print('session_start ' + id)
+    slash.logger.warning('session_start ' + id)
 #    LogModel.systemHandler.push_application()
     slash.logger.handlers.insert(0, LogModel.systemHandler)
     slash.logger.info("Session started: " + str(slash.context.session))
+    slash.logger.warning('session_start done')
+    session_event.set()
 
 @QtCore.Slot(str)
 def session_end(id):
-    print('session_stop ' + id)
+    slash.logger.warning('session_end ' + id)
     slash.logger.info("Session ended: " + id)
     slash.logger.handlers.remove(LogModel.systemHandler)
 #    LogModel.systemHandler.pop_application()
+    slash.logger.warning('session_end done')
+    session_event.set()
 
 @QtCore.Slot(str)
 def test_start(id):
-    print('test_start ' + id)
+    slash.logger.warning('test_start ' + id)
     slash.logger.info("Test started: " + id)
     handler = LogModel.getLogHandler(
         slash.test.__slash__.function_name + ' #' + str(slash.context.test.__slash__.test_index1),
@@ -187,15 +197,18 @@ def test_start(id):
         False)
     slash.logger.handlers.insert(0, handler)
     handlers[id] = handler
+    slash.logger.warning('test_start done')
+    test_event.set()
 
 @QtCore.Slot(str)
 def test_end(id):
-    print('test_stop ' + id)
+    slash.logger.warning('test_stop ' + id)
     handler = handlers[id]
     slash.logger.handlers.remove(handler)
     del handlers[id]
     slash.logger.info("Test ended: " + id)
-
+    slash.logger.warning('test_end done')
+    test_event.set()
 
 class MessageSender(QtCore.QObject):
     session_start = QtCore.Signal(str)
@@ -203,32 +216,47 @@ class MessageSender(QtCore.QObject):
     test_start = QtCore.Signal(str)
     test_end = QtCore.Signal(str)
 
+# ---- These handlers are invoked from slash in a separate thread ------------------------------------------------------
+
 message_sender = MessageSender()
 message_sender.session_start.connect(session_start)
 message_sender.session_end.connect(session_end)
 message_sender.test_start.connect(test_start)
 message_sender.test_end.connect(test_end)
 
-handlers = {}
-
 @staticmethod
 @slash.hooks.session_start.register
 def session_start_handler():
-    print('session_start_handler')
+    slash.logger.warning('session_start_handler - start')
     message_sender.session_start.emit(str(slash.context.session_id))
+    session_event.wait()
+    session_event.clear()
+    slash.logger.warning('session_start_handler- stop')
 
 @staticmethod
 @slash.hooks.session_end.register
 def session_end_handler():
+    slash.logger.warning('session_end_handler - start')
     message_sender.session_end.emit(str(slash.context.session_id))
+    session_event.wait()
+    session_event.clear()
+    slash.logger.warning('session_end_handler - stop')
 
 @staticmethod
 @slash.hooks.test_start.register
 def test_start_handler():
+    slash.logger.warning('test_start_handler - start')
     message_sender.test_start.emit(str(slash.context.test_id))
+    test_event.wait()
+    test_event.clear()
+    slash.logger.warning('test_start_handler - stop')
 
 @staticmethod
 @slash.hooks.test_end.register
 def test_end_handler():
+    slash.logger.warning('test_end_handler - start')
     message_sender.test_end.emit(str(slash.context.test_id))
+    test_event.wait()
+    test_event.clear()
+    slash.logger.warning('test_end_handler - stop')
 
