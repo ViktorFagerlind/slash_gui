@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>866</width>
-    <height>582</height>
+    <width>848</width>
+    <height>660</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,86 +16,196 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_4">
     <item>
-     <widget class="QSplitter" name="splitter">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>1</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
+     <widget class="QSplitter" name="splitter_2">
       <property name="orientation">
-       <enum>Qt::Vertical</enum>
+       <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QGroupBox" name="groupBoxTests">
+      <widget class="QSplitter" name="splitter">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>1</verstretch>
+        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+         <horstretch>2</horstretch>
+         <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>200</height>
-        </size>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
-       <property name="baseSize">
-        <size>
-         <width>0</width>
-         <height>0</height>
-        </size>
+       <widget class="QGroupBox" name="groupBoxTests">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>3</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>200</height>
+         </size>
+        </property>
+        <property name="baseSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="title">
+         <string>Tests</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QTabWidget" name="tabWidgetTest">
+           <property name="currentIndex">
+            <number>-1</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <property name="sizeConstraint">
+            <enum>QLayout::SetMinimumSize</enum>
+           </property>
+           <item>
+            <widget class="QPushButton" name="startSetButton">
+             <property name="text">
+              <string>Start Test Set</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>icons/PlayMultiple.png</normaloff>icons/PlayMultiple.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="startTestButton">
+             <property name="text">
+              <string>Start Test</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>icons/Play.png</normaloff>icons/Play.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="abortButton">
+             <property name="text">
+              <string>Abort</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>icons/Cancel.png</normaloff>icons/Cancel.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QGroupBox" name="groupBoxResults">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>1</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="title">
+         <string>Results</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QTreeView" name="TreeViewResults">
+           <property name="iconSize">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <property name="sizeConstraint">
+            <enum>QLayout::SetMinimumSize</enum>
+           </property>
+           <item>
+            <widget class="QPushButton" name="gotoLogButton">
+             <property name="text">
+              <string>Goto Log</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>icons/Script.png</normaloff>icons/Script.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <widget class="QGroupBox" name="groupBoxLog">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+         <horstretch>2</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
        <property name="title">
-        <string>Tests</string>
+        <string>Logs</string>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QTabWidget" name="tabWidgetTest">
+         <widget class="QTabWidget" name="tabWidgetLog">
           <property name="currentIndex">
            <number>-1</number>
           </property>
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout">
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
           <property name="sizeConstraint">
            <enum>QLayout::SetMinimumSize</enum>
           </property>
           <item>
-           <widget class="QPushButton" name="startSetButton">
+           <widget class="QPushButton" name="closeLogsButton">
             <property name="text">
-             <string>Start Test Set</string>
+             <string>Close Logs</string>
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>icons/PlayMultiple.png</normaloff>icons/PlayMultiple.png</iconset>
+              <normaloff>icons/WideBrush.png</normaloff>icons/WideBrush.png</iconset>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="startTestButton">
-            <property name="text">
-             <string>Start Test</string>
-            </property>
-            <property name="icon">
-             <iconset>
-              <normaloff>icons/Play.png</normaloff>icons/Play.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="abortButton">
-            <property name="text">
-             <string>Abort</string>
-            </property>
-            <property name="icon">
-             <iconset>
-              <normaloff>icons/Cancel.png</normaloff>icons/Cancel.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer">
+           <spacer name="horizontalSpacer_3">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -111,113 +221,6 @@
         </item>
        </layout>
       </widget>
-      <widget class="QGroupBox" name="groupBoxResults">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="title">
-        <string>Results</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_4">
-        <item>
-         <widget class="QTreeView" name="TreeViewResults">
-          <property name="iconSize">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <property name="sizeConstraint">
-           <enum>QLayout::SetMinimumSize</enum>
-          </property>
-          <item>
-           <widget class="QPushButton" name="gotoLogButton">
-            <property name="text">
-             <string>Goto Log</string>
-            </property>
-            <property name="icon">
-             <iconset>
-              <normaloff>icons/Script.png</normaloff>icons/Script.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_2">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </widget>
-    </item>
-    <item>
-     <widget class="QGroupBox" name="groupBoxLog">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-        <horstretch>1</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="title">
-       <string>Logs</string>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-       <item>
-        <widget class="QTabWidget" name="tabWidgetLog">
-         <property name="currentIndex">
-          <number>-1</number>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <property name="sizeConstraint">
-          <enum>QLayout::SetMinimumSize</enum>
-         </property>
-         <item>
-          <widget class="QPushButton" name="closeLogsButton">
-           <property name="text">
-            <string>Close Logs</string>
-           </property>
-           <property name="icon">
-            <iconset>
-             <normaloff>icons/WideBrush.png</normaloff>icons/WideBrush.png</iconset>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-      </layout>
      </widget>
     </item>
    </layout>
@@ -227,7 +230,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>866</width>
+     <width>848</width>
      <height>21</height>
     </rect>
    </property>

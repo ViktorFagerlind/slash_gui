@@ -39,9 +39,8 @@ class Test:
 
 
 class TestSuite:
-    def __init__(self, name, test_paths, cmd, listView):
+    def __init__(self, name, test_paths, listView):
         self.name = name
-        self.cmd = cmd
         self.tests = []
         for fp,tests in test_paths.items():
             self.tests.append(Test(fp,tests))
@@ -57,9 +56,11 @@ class TestSuite:
     def slash_runner_thread(test_files):
         #slash_run(args)
         with slash.Session() as session:
+                print('XXX Start session')
                 tests = Loader().get_runnables(test_files)
                 with session.get_started_context():
                     slash.run_tests(tests)
+                print('XXX End session')
 
     @staticmethod
     def run_slash_in_thread(args):
@@ -68,8 +69,9 @@ class TestSuite:
         #TestSuite.slash_runner_thread(args)
 
     def start(self):
-        slash.logger.info('Start suit: slash run ' + self.cmd)
-        TestSuite.run_slash_in_thread(self.cmd.split())
+        slash.logger.info('Start suit: ' + self.name)
+        test_paths = [t.filepath for t in self.tests]
+        TestSuite.run_slash_in_thread(test_paths)
 
     def start_test(self):
         selected_items = self.list_view.selectedIndexes()
@@ -95,6 +97,8 @@ class TestManager:
     def __init__(self, tab_widget, action_start_suit, action_start_test, action_abort):
         self.tabWidget = tab_widget
 
+        slash.logger.handlers.insert(0, LogModel.systemHandler)
+
         colorama.init()
 
         test_dir = 'src/tests/'
@@ -107,13 +111,13 @@ class TestManager:
         suit_filenames = get_filenames_from_dir('*.suit', suit_dir)
 
         self.suites = []
-        self.add_test_suite('All', TestManager.get_tests_from_dirs([test_dir]), test_dir)
+        self.add_test_suite('All', TestManager.get_tests_from_dirs([test_dir]))
 
         for sfn in suit_filenames:
             path_tuples = []
             path_tuples.extend(iter_suite_file_paths([suit_dir + sfn]))
             paths = [pt[0] for pt in path_tuples]
-            self.add_test_suite(sfn.split('.')[0], TestManager.get_tests_from_dirs(paths), '-f ' + suit_dir + sfn)
+            self.add_test_suite(sfn.split('.')[0], TestManager.get_tests_from_dirs(paths))
 
     def __del__(self):
         pass
@@ -147,9 +151,9 @@ class TestManager:
                     tests[filepath] = {testname:opt}
         return tests
 
-    def add_test_suite(self, suite_name, test_runnables, cmd):
+    def add_test_suite(self, suite_name, test_runnables):
         list_view = QtGui.QListView(self.tabWidget)
-        test_suite = TestSuite(suite_name, test_runnables, cmd, list_view)
+        test_suite = TestSuite(suite_name, test_runnables, list_view)
         self.tabWidget.addTab(list_view, suite_name)
         self.suites.append(test_suite)
 
@@ -173,8 +177,8 @@ handlers = {}
 def session_start(id):
     print('session_start ' + id)
 #    LogModel.systemHandler.push_application()
-    slash.logger.handlers.insert(0, LogModel.systemHandler)
-    LogModel.systemHandler.startAutomaticUpdates()
+    #slash.logger.handlers.insert(0, LogModel.systemHandler)
+    LogModel.systemHandler.enterThreadedMode()
     slash.logger.info("Session started: " + str(slash.context.session))
     print('session_start done')
     event.set()
@@ -183,8 +187,8 @@ def session_start(id):
 def session_end(id):
     print('session_end ' + id)
     slash.logger.info("Session ended: " + id)
-    slash.logger.handlers.remove(LogModel.systemHandler)
-    LogModel.systemHandler.stopAutomaticUpdates()
+    #slash.logger.handlers.remove(LogModel.systemHandler)
+    LogModel.systemHandler.exitThreadedMode()
 #    LogModel.systemHandler.pop_application()
     print('session_end done')
     event.set()
@@ -198,7 +202,7 @@ def test_start(id):
         logbook.INFO,
         False)
     slash.logger.handlers.insert(0, handler)
-    handler.startAutomaticUpdates()
+    handler.enterThreadedMode()
     handlers[id] = handler
     print('test_start done')
     event.set()
@@ -207,7 +211,7 @@ def test_start(id):
 def test_end(id):
     print('test_stop ' + id)
     handler = handlers[id]
-    handler.stopAutomaticUpdates()
+    handler.exitThreadedMode()
     slash.logger.handlers.remove(handler)
     del handlers[id]
     slash.logger.info("Test ended: " + id)

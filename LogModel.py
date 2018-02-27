@@ -43,6 +43,7 @@ class LogModel:
 class ListViewHandler(logbook.Handler):
     def __init__(self, listView, level=logbook.INFO, bubble=True):
         super().__init__(level=level, bubble=bubble)
+        self.formatter = logbook.StringFormatter('[{record.time:%Y-%m-%d %H:%M:%S}] {record.message}')
 
         self.listView = listView
         self.modelLog = QtGui.QStandardItemModel(self.listView)
@@ -52,20 +53,25 @@ class ListViewHandler(logbook.Handler):
 
         self.timer = QtCore.QTimer(listView)
         self.message_queue = Queue()
+        self.threaded = False
 
     def emit(self, record):
         self.message_queue.put({'line': str(self.format(record)), 'level': record.level})
+        if not self.threaded:
+            self._updateLogWindow()
 
-    def startAutomaticUpdates(self):
-        #print('startAutomaticUpdates')
+    def enterThreadedMode(self):
+        #print('enterThreadedMode')
         self.timer.timeout.connect(self._updateLogWindow)
         self.timer.start(10)
+        self.threaded = True
 
-    def stopAutomaticUpdates(self):
-        #print('stopAutomaticUpdates')
+    def exitThreadedMode(self):
+        #print('exitThreadedMode')
         self.timer.timeout.disconnect(self._updateLogWindow)
         self.timer.stop()
         self._updateLogWindow()
+        self.threaded = False
 
     def _updateLogWindow(self):
         try:
@@ -73,9 +79,8 @@ class ListViewHandler(logbook.Handler):
                 message = self.message_queue.get(False)
                 line = message['line']
                 level = message['level']
-                item = QtGui.QStandardItem(line)
-                #print('line: ' + line)
 
+                item = QtGui.QStandardItem(line)
                 if level == logbook.DEBUG or level == logbook.INFO:
                     item.setForeground(QtGui.QColor("black"))
                 elif level == logbook.WARNING:
