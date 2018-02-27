@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'MainWindow.ui'
 #
-# Created: Mon Feb 19 14:42:07 2018
-#      by: pyside-uic 0.2.15 running on PySide 1.2.2
+# Created: Tue Feb 27 11:01:56 2018
+#      by: pyside-uic 0.2.15 running on PySide 1.2.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,18 +12,26 @@ from PySide import QtCore, QtGui
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(863, 874)
+        MainWindow.resize(866, 582)
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.verticalLayout_2 = QtGui.QVBoxLayout(self.centralwidget)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.splitter_2 = QtGui.QSplitter(self.centralwidget)
-        self.splitter_2.setOrientation(QtCore.Qt.Horizontal)
-        self.splitter_2.setObjectName("splitter_2")
-        self.splitter = QtGui.QSplitter(self.splitter_2)
+        self.horizontalLayout_4 = QtGui.QHBoxLayout(self.centralwidget)
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.splitter = QtGui.QSplitter(self.centralwidget)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(1)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.splitter.sizePolicy().hasHeightForWidth())
+        self.splitter.setSizePolicy(sizePolicy)
         self.splitter.setOrientation(QtCore.Qt.Vertical)
         self.splitter.setObjectName("splitter")
         self.groupBoxTests = QtGui.QGroupBox(self.splitter)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(1)
+        sizePolicy.setHeightForWidth(self.groupBoxTests.sizePolicy().hasHeightForWidth())
+        self.groupBoxTests.setSizePolicy(sizePolicy)
+        self.groupBoxTests.setMinimumSize(QtCore.QSize(0, 200))
         self.groupBoxTests.setBaseSize(QtCore.QSize(0, 0))
         self.groupBoxTests.setObjectName("groupBoxTests")
         self.verticalLayout = QtGui.QVBoxLayout(self.groupBoxTests)
@@ -56,6 +64,11 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addItem(spacerItem)
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.groupBoxResults = QtGui.QGroupBox(self.splitter)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.groupBoxResults.sizePolicy().hasHeightForWidth())
+        self.groupBoxResults.setSizePolicy(sizePolicy)
         self.groupBoxResults.setObjectName("groupBoxResults")
         self.verticalLayout_4 = QtGui.QVBoxLayout(self.groupBoxResults)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
@@ -75,7 +88,13 @@ class Ui_MainWindow(object):
         spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem1)
         self.verticalLayout_4.addLayout(self.horizontalLayout_2)
-        self.groupBoxLog = QtGui.QGroupBox(self.splitter_2)
+        self.horizontalLayout_4.addWidget(self.splitter)
+        self.groupBoxLog = QtGui.QGroupBox(self.centralwidget)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(1)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.groupBoxLog.sizePolicy().hasHeightForWidth())
+        self.groupBoxLog.setSizePolicy(sizePolicy)
         self.groupBoxLog.setObjectName("groupBoxLog")
         self.verticalLayout_3 = QtGui.QVBoxLayout(self.groupBoxLog)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
@@ -94,10 +113,10 @@ class Ui_MainWindow(object):
         spacerItem2 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem2)
         self.verticalLayout_3.addLayout(self.horizontalLayout_3)
-        self.verticalLayout_2.addWidget(self.splitter_2)
+        self.horizontalLayout_4.addWidget(self.groupBoxLog)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 863, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 866, 21))
         self.menubar.setObjectName("menubar")
         self.menuFile = QtGui.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
