@@ -177,7 +177,6 @@ handlers = {}
 @QtCore.Slot(str)
 def before_session_start(id):
     #print('before_session_start ' + id)
-    LogViewer.systemHandler.enterThreadedMode()
     LogViewer.systemHandler.push_application()
     slash.logger.info("Session started: " + str(slash.context.session))
     #print('before_session_start done')
@@ -188,7 +187,7 @@ def session_end(id):
     #print('session_end ' + id)
     slash.logger.info("Session ended: " + id)
     LogViewer.systemHandler.pop_application()
-    LogViewer.systemHandler.exitThreadedMode()
+    #LogViewer.systemHandler.exitThreadedMode()
     #print('session_end done')
     event.set()
 

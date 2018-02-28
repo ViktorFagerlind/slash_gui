@@ -64,10 +64,10 @@ class ListViewLogHandler(logbook.Handler):
         if not self.threaded:
             self._updateLogWindow()
 
-    def enterThreadedMode(self):
+    def enterThreadedMode(self, refresh_rate_ms=20):
         #print('enterThreadedMode')
         self.timer.timeout.connect(self._updateLogWindow)
-        self.timer.start(10)
+        self.timer.start(refresh_rate_ms)
         self.threaded = True
 
     def exitThreadedMode(self):

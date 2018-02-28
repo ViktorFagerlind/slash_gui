@@ -1,5 +1,5 @@
 import sys
-import importlib.util
+import slash
 
 from PySide import QtGui, QtCore
 
@@ -8,6 +8,7 @@ from .SlashWrapper import SlashWrapper
 from .TodoResultsViewer import TestResultManager
 from .MainWindow import Ui_MainWindow
 from .LogViewer import LogViewer
+
 # ----------------------------------------------------------------------------------------------------------------------
 
 
@@ -23,8 +24,7 @@ class ControlMainWindow(QtGui.QMainWindow):
         # Init log
         LogViewer.setup(self.ui.tabWidgetLog,
                         self.ui.actionActionCloseLogs)
-
-        #Log.mainLog.info("Ready!")
+        LogViewer.systemHandler.enterThreadedMode(200)
 
         # Init TestManager
         self.TestManager = SlashWrapper(self.ui.tabWidgetTest,
@@ -41,8 +41,11 @@ class ControlMainWindow(QtGui.QMainWindow):
 
         self.restoreGuiState()
 
+        slash.logger.info('GUI setup complete')
+
     @staticmethod
     def Quit():
+        LogViewer.systemHandler.exitThreadedMode()
         QtGui.qApp.closeAllWindows()
 
     def closeEvent(self, event):
