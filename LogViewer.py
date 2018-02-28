@@ -4,19 +4,21 @@ from PySide import QtGui, QtCore
 import logbook
 import slash
 
+# ----------------------------------------------------------------------------------------------------------------------
 
-class LogModel:
+
+class LogViewer:
     tabWidget = None
     systemHandler = None
 
     @staticmethod
     def setup(tabWidget, actionCloseLogs):
-        LogModel.tabWidget = tabWidget
-        LogModel.tabWidget.setTabsClosable(True)
-        LogModel.tabWidget.tabCloseRequested.connect(LogModel.closeTab)
-        actionCloseLogs.triggered.connect(LogModel.closeAllTabs)
+        LogViewer.tabWidget = tabWidget
+        LogViewer.tabWidget.setTabsClosable(True)
+        LogViewer.tabWidget.tabCloseRequested.connect(LogViewer.closeTab)
+        actionCloseLogs.triggered.connect(LogViewer.closeAllTabs)
 
-        LogModel.systemHandler = LogModel.getLogHandler("System", logbook.INFO, False)
+        LogViewer.systemHandler = LogViewer.getLogHandler("System", logbook.INFO, False)
 
     @staticmethod
     def closeTab(currentIndex):
@@ -24,26 +26,28 @@ class LogModel:
             slash.logger.warning("Cannot close the system log")
             return
 
-        LogModel.tabWidget.removeTab(currentIndex)
+        LogViewer.tabWidget.removeTab(currentIndex)
 
     @staticmethod
     def closeAllTabs():
-        for i in range(LogModel.tabWidget.count() - 1):
-            LogModel.tabWidget.removeTab(1)
+        for i in range(LogViewer.tabWidget.count() - 1):
+            LogViewer.tabWidget.removeTab(1)
 
     @staticmethod
     def getLogHandler(name, level=logbook.INFO, bubble=True):
-        listView = QtGui.QListView(LogModel.tabWidget)
-        LogModel.tabWidget.addTab(listView, name)
-        LogModel.tabWidget.setCurrentWidget(listView)
+        listView = QtGui.QListView(LogViewer.tabWidget)
+        LogViewer.tabWidget.addTab(listView, name)
+        LogViewer.tabWidget.setCurrentWidget(listView)
 
-        listViewHandler = ListViewHandler(listView, level, bubble)
+        listViewHandler = ListViewLogHandler(listView, level, bubble)
         return listViewHandler
+# ----------------------------------------------------------------------------------------------------------------------
 
-class ListViewHandler(logbook.Handler):
+
+class ListViewLogHandler(logbook.Handler):
     def __init__(self, listView, level=logbook.INFO, bubble=True):
         super().__init__(level=level, bubble=bubble)
-        self.formatter = logbook.StringFormatter('[{record.time:%Y-%m-%d %H:%M:%S}] {record.message}')
+        self.formatter = logbook.StringFormatter('[{record.time:%H:%M:%S}] {record.message}')
 
         self.listView = listView
         self.modelLog = QtGui.QStandardItemModel(self.listView)
@@ -100,3 +104,5 @@ class ListViewHandler(logbook.Handler):
 
     def write(self, m):
         pass
+# ----------------------------------------------------------------------------------------------------------------------
+

@@ -3,11 +3,12 @@ import importlib.util
 
 from PySide import QtGui, QtCore
 
-from .ResultTreeModel import ResultTreeModel
-from .TestManager import TestManager
-from .Results import TestResultManager
+from .TodoResultTreeModel import ResultTreeModel
+from .SlashWrapper import SlashWrapper
+from .TodoResults import TestResultManager
 from .MainWindow import Ui_MainWindow
-from .LogModel import LogModel
+from .LogViewer import LogViewer
+# ----------------------------------------------------------------------------------------------------------------------
 
 
 class ControlMainWindow(QtGui.QMainWindow):
@@ -20,16 +21,16 @@ class ControlMainWindow(QtGui.QMainWindow):
         self.ui.actionQuit.triggered.connect(ControlMainWindow.Quit)
 
         # Init log
-        LogModel.setup(self.ui.tabWidgetLog,
-                    self.ui.actionActionCloseLogs)
+        LogViewer.setup(self.ui.tabWidgetLog,
+                        self.ui.actionActionCloseLogs)
 
         #Log.mainLog.info("Ready!")
 
         # Init TestManager
-        self.TestManager = TestManager(self.ui.tabWidgetTest,
-                                       self.ui.actionStartSet,
-                                       self.ui.actionStartTest,
-                                       self.ui.actionAbort)
+        self.TestManager = SlashWrapper(self.ui.tabWidgetTest,
+                                        self.ui.actionStartSet,
+                                        self.ui.actionStartTest,
+                                        self.ui.actionAbort)
 
         # Init TestResultManager
         self.result_tree_model = ResultTreeModel(self.ui.TreeViewResults, self.ui.actionTestResultsClicked)
@@ -48,7 +49,7 @@ class ControlMainWindow(QtGui.QMainWindow):
         self.saveGuiState()
 
     def saveGuiState(self):
-        qsettings = QtCore.QSettings("VF", "TestFramework")
+        qsettings = QtCore.QSettings("VF", "SlashGui")
 
         qsettings.beginGroup("mainWindow")
         qsettings.setValue("geometry", self.saveGeometry())
@@ -60,7 +61,7 @@ class ControlMainWindow(QtGui.QMainWindow):
         qsettings.endGroup()
 
     def restoreGuiState(self):
-        qsettings = QtCore.QSettings("VF", "TestFramework")
+        qsettings = QtCore.QSettings("VF", "SlashGui")
 
         qsettings.beginGroup("mainWindow")
         # No need for toPoint, etc. : PySide converts types

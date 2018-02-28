@@ -14,10 +14,9 @@ import os
 import threading
 import time
 
-from .LogModel import LogModel
+from .LogViewer import LogViewer
+# ----------------------------------------------------------------------------------------------------------------------
 
-
-# ---- TestManager -----------------------------------------------------------------------------------------------------
 
 def get_filenames_from_dir(wildcard, dir):
     result = []
@@ -29,13 +28,16 @@ def get_filenames_from_dir(wildcard, dir):
         result.append(fn.split('\\')[-1])
 
     return result
+# ----------------------------------------------------------------------------------------------------------------------
 
-class Test:
+
+class TestFile:
     def __init__(self, filepath, tests):
         self.filepath = filepath
         self.display_name = filepath.split('\\')[-1]
         for t,o in tests.items():
             self.display_name += '\n   ' + t + '  ' + o
+# ----------------------------------------------------------------------------------------------------------------------
 
 
 class TestSuite:
@@ -43,7 +45,7 @@ class TestSuite:
         self.name = name
         self.tests = []
         for fp,tests in test_paths.items():
-            self.tests.append(Test(fp,tests))
+            self.tests.append(TestFile(fp, tests))
 
         # Init test list view
         self.list_view = listView
@@ -90,14 +92,14 @@ class TestSuite:
         for t in self.tests:
             item = QtGui.QStandardItem(t.display_name)
             self.model_tests.appendRow(item)
+# ----------------------------------------------------------------------------------------------------------------------
 
 
-
-class TestManager:
+class SlashWrapper:
     def __init__(self, tab_widget, action_start_suit, action_start_test, action_abort):
         self.tabWidget = tab_widget
 
-        slash.logger.handlers.insert(0, LogModel.systemHandler)
+        slash.logger.handlers.insert(0, LogViewer.systemHandler)
 
         colorama.init()
 
@@ -106,18 +108,18 @@ class TestManager:
 
         action_start_test.triggered.connect(self.start_test)
         action_start_suit.triggered.connect(self.start_suit)
-        action_abort.triggered.connect(TestManager.abort)
+        action_abort.triggered.connect(SlashWrapper.abort)
 
         suit_filenames = get_filenames_from_dir('*.suit', suit_dir)
 
         self.suites = []
-        self.add_test_suite('All', TestManager.get_tests_from_dirs([test_dir]))
+        self.add_test_suite('All', SlashWrapper.get_tests_from_dirs([test_dir]))
 
         for sfn in suit_filenames:
             path_tuples = []
             path_tuples.extend(iter_suite_file_paths([suit_dir + sfn]))
             paths = [pt[0] for pt in path_tuples]
-            self.add_test_suite(sfn.split('.')[0], TestManager.get_tests_from_dirs(paths))
+            self.add_test_suite(sfn.split('.')[0], SlashWrapper.get_tests_from_dirs(paths))
 
     def __del__(self):
         pass
@@ -170,6 +172,7 @@ class TestManager:
 
 # -- These handlers are invoked by the slash hooks but run in the GUI thread -------------------------------------------
 
+
 event = Event()
 handlers = {}
 
@@ -178,7 +181,7 @@ def session_start(id):
     print('session_start ' + id)
 #    LogModel.systemHandler.push_application()
     #slash.logger.handlers.insert(0, LogModel.systemHandler)
-    LogModel.systemHandler.enterThreadedMode()
+    LogViewer.systemHandler.enterThreadedMode()
     slash.logger.info("Session started: " + str(slash.context.session))
     print('session_start done')
     event.set()
@@ -188,7 +191,7 @@ def session_end(id):
     print('session_end ' + id)
     slash.logger.info("Session ended: " + id)
     #slash.logger.handlers.remove(LogModel.systemHandler)
-    LogModel.systemHandler.exitThreadedMode()
+    LogViewer.systemHandler.exitThreadedMode()
 #    LogModel.systemHandler.pop_application()
     print('session_end done')
     event.set()
@@ -197,7 +200,7 @@ def session_end(id):
 def test_start(id):
     print('test_start ' + id)
     slash.logger.info("Test started: " + id)
-    handler = LogModel.getLogHandler(
+    handler = LogViewer.getLogHandler(
         slash.test.__slash__.function_name + ' #' + str(slash.context.test.__slash__.test_index1),
         logbook.INFO,
         False)
@@ -225,6 +228,7 @@ class MessageSender(QtCore.QObject):
     test_end = QtCore.Signal(str)
 
 # ---- These handlers are invoked from slash in a separate thread ------------------------------------------------------
+
 
 message_sender = MessageSender()
 message_sender.session_start.connect(session_start)
