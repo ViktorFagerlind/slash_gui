@@ -5,7 +5,7 @@ from PySide import QtGui, QtCore
 
 from .TodoResultTreeModel import ResultTreeModel
 from .SlashWrapper import SlashWrapper
-from .TodoResults import TestResultManager
+from .TodoResultsViewer import TestResultManager
 from .MainWindow import Ui_MainWindow
 from .LogViewer import LogViewer
 # ----------------------------------------------------------------------------------------------------------------------

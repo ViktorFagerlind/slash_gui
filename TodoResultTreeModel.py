@@ -5,7 +5,7 @@ import operator
 
 from PySide import QtCore
 from .TodoResultTreeItems import LogTreeItem, SetTreeItem, TestTreeItem, CriteriaTreeItem, EvaluationTreeItem, RootTreeItem
-from .TodoResults import TestResultManager
+from .TodoResultsViewer import TestResultManager
 
 
 class ResultTreeModel(QtCore.QAbstractItemModel):
