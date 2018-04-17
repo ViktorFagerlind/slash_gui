@@ -18,7 +18,7 @@ class LogViewer:
         LogViewer.tabWidget.tabCloseRequested.connect(LogViewer.closeTab)
         actionCloseLogs.triggered.connect(LogViewer.closeAllTabs)
 
-        LogViewer.systemHandler = LogViewer.getLogHandler("System", logbook.INFO, False)
+        LogViewer.systemHandler = LogViewer.getLogHandler("System", logbook.INFO, True)
 
     @staticmethod
     def closeTab(currentIndex):
