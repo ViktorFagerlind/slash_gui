@@ -24,8 +24,7 @@ def get_filenames_from_dir(wildcard, dir):
 
     file_names = glob.glob(dir + wildcard)
     for fn in file_names:
-        split_name = fn.split('\\')
-        result.append(fn.split('\\')[-1])
+        result.append(os.path.basename(fn))
 
     return result
 # ----------------------------------------------------------------------------------------------------------------------
@@ -34,9 +33,8 @@ def get_filenames_from_dir(wildcard, dir):
 class TestFile:
     def __init__(self, filepath, tests):
         self.filepath = filepath
-        self.display_name = filepath.split('\\')[-1]
-        for t,o in tests.items():
-            self.display_name += '\n   ' + t + '  ' + o
+        self.display_name = '' # os.path.basename(filepath) TODO: Need for filename?
+        self.display_name = '\n'.join([t + '  ' + o for t,o in tests.items()])
 # ----------------------------------------------------------------------------------------------------------------------
 
 
@@ -193,7 +191,7 @@ def test_start(id):
     handler = LogViewer.getLogHandler(
         slash.test.__slash__.function_name + ' #' + str(slash.context.test.__slash__.test_index1),
         logbook.INFO,
-        True)
+        False)
     slash.logger.handlers.insert(0, handler)
     handler.enterThreadedMode()
     handlers[id] = handler
