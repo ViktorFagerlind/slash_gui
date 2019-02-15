@@ -5,3 +5,4 @@
 QtProject/*
 .idea/*
 bin/__pycache__
+__integrate_db_test
